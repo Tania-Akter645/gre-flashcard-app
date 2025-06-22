@@ -4,53 +4,67 @@ import random
 
 # GRE word load
 def load_words():
-    words = []
     with open("gre_words.csv", mode="r") as file:
         reader = csv.DictReader(file)
-        for row in reader:
-            words.append(row)
-    return words
+        return list(reader)
 
-# function of new word
+# show the next word
 def next_card():
-    global current_word
-    if words:
-        current_word = random.choice(words)
-        word_label.config(text=current_word["Word"])
-        meaning_label.config(text="")
-    else:
+    global current_word, word_index
+
+    if not words:
         word_label.config(text="Well done! 🎉")
         meaning_label.config(text="You've reviewed all words.")
-        know_button.config(state=tk.DISABLED)
-        dont_know_button.config(state=tk.DISABLED)
+        disable_buttons()
+        return
 
-# function of word meaning
+    if shuffle_enabled.get():
+        current_word = random.choice(words)
+    else:
+        if word_index >= len(words):
+            word_label.config(text="Well done! 🎉")
+            meaning_label.config(text="You've reviewed all words.")
+            disable_buttons()
+            return
+        current_word = words[word_index]
+        word_index += 1
+
+    word_label.config(text=current_word["Word"])
+    meaning_label.config(text="")
+
+def disable_buttons():
+    show_button.config(state=tk.DISABLED)
+    know_button.config(state=tk.DISABLED)
+    dont_know_button.config(state=tk.DISABLED)
+
 def show_meaning():
     meaning_label.config(text=current_word["Meaning"])
 
-# remove already known word and increase score
 def mark_known():
     global score
-    words.remove(current_word)
-    score += 1
-    score_label.config(text=f"Score: {score}")
+    if current_word in words:
+        words.remove(current_word)
+        score += 1
+        score_label.config(text=f"Score: {score}")
     next_card()
 
-# donot learn — go to the next word
 def mark_unknown():
     next_card()
 
-# --- GUI start ---
+# UI start
 root = tk.Tk()
 root.title("GRE Flashcard App")
-root.geometry("420x400")
-root.config(bg="#2e2e2e")  # Dark Mode
+root.geometry("450x420")
+root.config(bg="#2e2e2e")
 
 words = load_words()
 current_word = {}
+word_index = 0
 score = 0
 
-# label and  bottom create
+# Shuffle Toggle
+shuffle_enabled = tk.BooleanVar(value=True)
+
 word_label = tk.Label(root, text="", font=("Helvetica", 24), bg="#2e2e2e", fg="white")
 word_label.pack(pady=30)
 
@@ -58,7 +72,12 @@ meaning_label = tk.Label(root, text="", font=("Helvetica", 16), bg="#2e2e2e", fg
 meaning_label.pack()
 
 score_label = tk.Label(root, text="Score: 0", font=("Helvetica", 14), bg="#2e2e2e", fg="orange")
-score_label.pack(pady=10)
+score_label.pack(pady=5)
+
+shuffle_check = tk.Checkbutton(root, text="Shuffle Mode", variable=shuffle_enabled,
+                                bg="#2e2e2e", fg="white", selectcolor="#2e2e2e",
+                                font=("Helvetica", 12), command=next_card)
+shuffle_check.pack(pady=5)
 
 button_frame = tk.Frame(root, bg="#2e2e2e")
 button_frame.pack(pady=20)
@@ -72,8 +91,6 @@ know_button.grid(row=0, column=1, padx=5)
 dont_know_button = tk.Button(button_frame, text="I Don't Know", command=mark_unknown, width=15, bg="red", fg="white")
 dont_know_button.grid(row=0, column=2, padx=5)
 
-# first show a word
 next_card()
-
-# run
 root.mainloop()
+
