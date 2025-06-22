@@ -8,9 +8,18 @@ def load_words():
         reader = csv.DictReader(file)
         return list(reader)
 
+# for Timer Stop
+def cancel_timer():
+    global timer_id
+    if timer_id is not None:
+        root.after_cancel(timer_id)
+        timer_id = None
+
 # show the next word
 def next_card():
-    global current_word, word_index
+    global current_word, word_index, timer_id
+
+    cancel_timer()
 
     if not words:
         word_label.config(text="Well done! 🎉")
@@ -32,16 +41,21 @@ def next_card():
     word_label.config(text=current_word["Word"])
     meaning_label.config(text="")
 
+    # Start Countdown
+    timer_id = root.after(5000, mark_unknown)  # 5 seconds
+
 def disable_buttons():
     show_button.config(state=tk.DISABLED)
     know_button.config(state=tk.DISABLED)
     dont_know_button.config(state=tk.DISABLED)
 
 def show_meaning():
+    cancel_timer()
     meaning_label.config(text=current_word["Meaning"])
 
 def mark_known():
     global score
+    cancel_timer()
     if current_word in words:
         words.remove(current_word)
         score += 1
@@ -49,9 +63,10 @@ def mark_known():
     next_card()
 
 def mark_unknown():
+    cancel_timer()
     next_card()
 
-# UI start
+# UI শুরু
 root = tk.Tk()
 root.title("GRE Flashcard App")
 root.geometry("450x420")
@@ -61,6 +76,7 @@ words = load_words()
 current_word = {}
 word_index = 0
 score = 0
+timer_id = None
 
 # Shuffle Toggle
 shuffle_enabled = tk.BooleanVar(value=True)
