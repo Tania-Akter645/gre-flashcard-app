@@ -66,7 +66,7 @@ def mark_unknown():
     cancel_timer()
     next_card()
 
-# UI শুরু
+# UI start
 root = tk.Tk()
 root.title("GRE Flashcard App")
 root.geometry("450x420")
