@@ -12,6 +12,7 @@ This is a simple and interactive Python flashcard application for GRE word pract
 - 📊 Score tracking
 - 🌙 Dark mode interface
 - 🏁 Completion message when all words are reviewed
+- 🔀 Shuffle Mode (Toggle on/off)
 
 ---
 
