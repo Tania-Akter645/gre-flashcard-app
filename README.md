@@ -13,6 +13,8 @@ This is a simple and interactive Python flashcard application for GRE word pract
 - 🌙 Dark mode interface
 - 🏁 Completion message when all words are reviewed
 - 🔀 Shuffle Mode (Toggle on/off)
+- ⏱️ 5-second auto countdown timer for each flashcard
+
 
 ---
 
