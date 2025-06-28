@@ -1,30 +1,31 @@
-Word,Meaning
- abound , large numbers or amounts 
- amorphous , without a clearly defined shape or form
- austere , strict in manner, having no comforts or luxuries 
- belie , fail to give true impression of something, contradict, fail to justify 
- capricious , sudden change of mood, unpredictable, fickle 
- cerebral , of the cerebrum of the brain, intellectual rather than physical 
- congenial , pleasant or agreeable because suited to one's taste 
- conspicuous , clearly visible, attracting notice or attention 
- cursory , hasty and therefore not through or detailed 
- daunting , difficult to deal with, discourage through fear 
- deify , worship or regard as a god 
- didactic , instructive, particularly so as to appear patronizing 
- disseminate , spread widely 
- feasible , possible to do easily or conveniently 
- flout , openly disregard, mock, scoff 
- homogeneous , of the same kind 
- humdrum , lacking excitement or variety; boringly monotonous 
- insipid , tasteless, lacking interest 
- loquacious , talkative 
- misanthropic , having or showing dislike of other people 
- misnomer , a wrong or inaccurate name or designation 
- negligent , failing to take proper care over something 
- obsequious , obedient to an excessive or servile degree 
- placate , make less angry 
- proclivity , a tendency to choose or do something regularly 
- puerile , childishly silly 
- quixotic , extremely idealistic, unrealistic, impractical 
- spendthrift , a person who spends money in an irresponsible way 
- taciturn , saying little  wary , feeling or showing caution about possible dangers
+Word,Meaning,Category
+ abound , large numbers or amounts,easy
+ amorphous , without a clearly defined shape or form,hard
+ austere , strict in manner or having no comforts or luxuries ,hard
+ belie , fail to give true impression of something or contradict or fail to justify ,hard
+ capricious , sudden change of mood or unpredictable,hard
+ cerebral , of the cerebrum of the brain or intellectual rather than physical,hard
+ congenial , pleasant or agreeable because suited to one's taste ,medium
+ conspicuous , clearly visible ,hard
+ cursory , hasty and therefore not through or detailed ,easy
+ daunting , difficult to deal with ,medium
+ deify , worship or regard as a god ,easy
+ didactic , instructive or particularly so as to appear patronizing ,hard
+ disseminate , spread widely ,medium
+ feasible , possible to do easily or conveniently ,medium
+ flout , openly disregard or mock or scoff,hard
+ homogeneous , of the same kind ,easy
+ humdrum , lacking excitement or variety or boringly monotonous ,easy
+ insipid , tasteless or lacking interest ,easy
+ loquacious , talkative ,medium
+ misanthropic , having or showing dislike of other people ,medium
+ misnomer , a wrong or inaccurate name or designation ,hard
+ negligent , failing to take proper care over something ,easy
+ obsequious , obedient to an excessive or servile degree ,hard
+ placate , make less angry ,medium
+ proclivity , a tendency to choose or do something regularly ,hard
+ puerile , childishly silly ,hard
+ quixotic , extremely idealistic or unrealistic or impractical ,hard
+ spendthrift , a person who spends money in an irresponsible way ,hard
+ taciturn , saying little  wary,medium
+,,
