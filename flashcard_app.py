@@ -2,22 +2,35 @@ import tkinter as tk
 import csv
 import random
 
-# GRE word load
-def load_words():
-    with open("gre_words.csv", mode="r") as file:
-        reader = csv.DictReader(file)
-        return list(reader)
+known_words = set()
 
-# for Timer Stop
+
+def load_words(selected_category):
+    with open("gre_words.csv", newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        word_list = [
+            row for row in reader
+            if row["Category"].strip().lower() == selected_category.lower()
+        ]
+
+        return word_list
+
+
+
+def filter_words_by_category(category):
+    return [word for word in all_words if word["Category"] == category]
+
+
 def cancel_timer():
     global timer_id
     if timer_id is not None:
         root.after_cancel(timer_id)
         timer_id = None
 
-# show the next word
+
 def next_card():
-    global current_word, word_index, timer_id
+    global current_word, word_index, timer_id, words
 
     cancel_timer()
 
@@ -41,59 +54,96 @@ def next_card():
     word_label.config(text=current_word["Word"])
     meaning_label.config(text="")
 
-    # Start Countdown
-    timer_id = root.after(5000, mark_unknown)  # 5 seconds
+    timer_id = root.after(5000, mark_unknown)
+
 
 def disable_buttons():
     show_button.config(state=tk.DISABLED)
     know_button.config(state=tk.DISABLED)
     dont_know_button.config(state=tk.DISABLED)
 
+
 def show_meaning():
     cancel_timer()
     meaning_label.config(text=current_word["Meaning"])
 
+
 def mark_known():
     global score
     cancel_timer()
-    if current_word in words:
-        words.remove(current_word)
+
+    word_text = current_word["Word"]
+
+    if word_text not in known_words:
+        known_words.add(word_text)
         score += 1
         score_label.config(text=f"Score: {score}")
+
     next_card()
+
+
 
 def mark_unknown():
     cancel_timer()
     next_card()
 
-# UI start
+
+def update_category(event=None):
+    global words, word_index, score
+    selected_category = category_var.get()
+    words = load_words(selected_category)
+    word_index = 0
+    score = 0
+    score_label.config(text="Score: 0")
+    next_card()
+
+
+
+# UI
 root = tk.Tk()
 root.title("GRE Flashcard App")
-root.geometry("450x420")
+root.geometry("480x480")
 root.config(bg="#2e2e2e")
 
-words = load_words()
+with open("gre_words.csv", newline='', encoding='utf-8') as csvfile:
+    reader = csv.DictReader(csvfile)
+    all_words = list(reader)
+
+categories = sorted(set(word["Category"].strip().lower() for word in all_words if word["Category"].strip()))
+category_var = tk.StringVar()
+category_var.set(categories[0])
+selected_category = category_var.get()
+words = load_words(selected_category)
+
+words = []
 current_word = {}
 word_index = 0
 score = 0
 timer_id = None
 
-# Shuffle Toggle
-shuffle_enabled = tk.BooleanVar(value=True)
+# Dropdown
+categories = sorted(set(word["Category"] for word in all_words))
+category_var = tk.StringVar(value=categories[0])
+category_menu = tk.OptionMenu(root, category_var, *categories, command=update_category)
+category_menu.config(font=("Helvetica", 12), bg="white")
+category_menu.pack(pady=10)
 
+# Shuffle toggle
+shuffle_enabled = tk.BooleanVar(value=True)
+shuffle_check = tk.Checkbutton(root, text="Shuffle Mode", variable=shuffle_enabled,
+                               bg="#2e2e2e", fg="white", selectcolor="#2e2e2e",
+                               font=("Helvetica", 12))
+shuffle_check.pack(pady=5)
+
+# Labels and Buttons
 word_label = tk.Label(root, text="", font=("Helvetica", 24), bg="#2e2e2e", fg="white")
-word_label.pack(pady=30)
+word_label.pack(pady=20)
 
 meaning_label = tk.Label(root, text="", font=("Helvetica", 16), bg="#2e2e2e", fg="lightgreen")
 meaning_label.pack()
 
 score_label = tk.Label(root, text="Score: 0", font=("Helvetica", 14), bg="#2e2e2e", fg="orange")
 score_label.pack(pady=5)
-
-shuffle_check = tk.Checkbutton(root, text="Shuffle Mode", variable=shuffle_enabled,
-                                bg="#2e2e2e", fg="white", selectcolor="#2e2e2e",
-                                font=("Helvetica", 12), command=next_card)
-shuffle_check.pack(pady=5)
 
 button_frame = tk.Frame(root, bg="#2e2e2e")
 button_frame.pack(pady=20)
@@ -107,6 +157,5 @@ know_button.grid(row=0, column=1, padx=5)
 dont_know_button = tk.Button(button_frame, text="I Don't Know", command=mark_unknown, width=15, bg="red", fg="white")
 dont_know_button.grid(row=0, column=2, padx=5)
 
-next_card()
+update_category()
 root.mainloop()
-
